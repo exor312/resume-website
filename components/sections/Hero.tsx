@@ -13,16 +13,17 @@ export function Hero() {
         </p>
 
         <h1 className="text-5xl md:text-7xl font-heading font-bold mb-6">
-          <span className="text-gradient">Your Name</span>
+          <span className="text-gradient">Chino Vicente</span>
         </h1>
 
         <p className="text-xl md:text-2xl text-muted-foreground mb-4 font-heading">
-          Full Stack Developer &amp; Creative Technologist
+          Business Automation Specialist &amp; Salesforce Developer
         </p>
 
         <p className="text-base md:text-lg text-muted-foreground/80 max-w-xl mx-auto mb-10">
-          I build exceptional digital experiences with modern technologies.
-          Passionate about clean code, intuitive design, and solving complex problems.
+          Certified Salesforce Admin and Platform App Builder with 5+ years of experience
+          implementing solutions across Sales, Service, and Experience Clouds. Expert in
+          automation strategy using Make.com, n8n, AI, and GHL.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -38,7 +39,7 @@ export function Hero() {
             Get in Touch
           </a>
           <a
-            href="/resume.pdf"
+            href="/Chino_Vicente_CV_-_Automation.pdf"
             className={cn(
               'inline-flex items-center gap-2 px-6 py-3 rounded-xl',
               'border border-border text-foreground font-medium',

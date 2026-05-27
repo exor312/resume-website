@@ -4,50 +4,39 @@ import { Github, ExternalLink } from 'lucide-react'
 const projects: Project[] = [
   {
     id: '1',
-    title: 'Project Alpha',
-    description: 'A full-stack e-commerce platform with real-time inventory management, payment processing, and admin dashboard.',
-    tech: ['Next.js', 'Stripe', 'PostgreSQL', 'Prisma'],
-    githubUrl: 'https://github.com',
-    liveUrl: 'https://example.com',
+    title: 'AI-Powered CRM & Contract Automation',
+    description: 'Built a complete custom CRM for managing Agents, Clients, Doctors, and contract workflows using Airtable, n8n, and Docuseal. Enabled automated contract creation, monitoring, and sending.',
+    tech: ['Airtable', 'n8n', 'Docuseal', 'Slack', 'REST APIs'],
   },
   {
     id: '2',
-    title: 'Project Beta',
-    description: 'AI-powered content generation tool with collaborative editing, version control, and team workspaces.',
-    tech: ['React', 'OpenAI', 'Node.js', 'MongoDB'],
-    githubUrl: 'https://github.com',
-    liveUrl: 'https://example.com',
+    title: 'AI Image Generation & LinkedIn Publishing',
+    description: 'Developed an AI-powered image generation system using Gemini AI, integrated with n8n and LinkedIn API to automatically create branded marketing visuals and publish them.',
+    tech: ['Gemini AI', 'n8n', 'LinkedIn API', 'Azure OpenAI'],
   },
   {
     id: '3',
-    title: 'Project Gamma',
-    description: 'Real-time analytics dashboard with customizable widgets, data visualization, and automated reporting.',
-    tech: ['Vue.js', 'D3.js', 'Python', 'FastAPI'],
-    githubUrl: 'https://github.com',
-    liveUrl: 'https://example.com',
+    title: 'AI Postoperative Virtual Receptionist',
+    description: 'Built an AI-powered virtual receptionist using n8n, Twilio, Azure OpenAI, and PostgreSQL. Capable of messaging patients after surgery, answering symptom-related questions, and providing triage guidance.',
+    tech: ['n8n', 'Twilio', 'Azure OpenAI', 'PostgreSQL', 'AI Prompt Design'],
   },
   {
     id: '4',
-    title: 'Project Delta',
-    description: 'Mobile-first social platform with real-time messaging, content sharing, and community features.',
-    tech: ['React Native', 'Firebase', 'GraphQL', 'TypeScript'],
-    githubUrl: 'https://github.com',
+    title: 'Invoice Generation Automation',
+    description: 'Automated invoice generation by integrating Connecteam, n8n, and PDF.co, eliminating manual calculations and ensuring accurate invoice production from agent timesheets.',
+    tech: ['Connecteam', 'n8n', 'PDF.co', 'Automation'],
   },
   {
     id: '5',
-    title: 'Project Epsilon',
-    description: 'Developer tool for automated code review, security scanning, and CI/CD pipeline integration.',
-    tech: ['Go', 'Docker', 'Kubernetes', 'GitHub Actions'],
-    githubUrl: 'https://github.com',
-    liveUrl: 'https://example.com',
+    title: 'Salesforce SSO & API Integration',
+    description: 'Implemented Single Sign-On (SSO) for Salesforce and integrated with third-party applications using REST APIs, Flows, and Apex — enabling seamless data exchange and real-time synchronization.',
+    tech: ['Salesforce', 'SSO', 'REST APIs', 'Apex', 'Azure DevOps'],
   },
   {
     id: '6',
-    title: 'Project Zeta',
-    description: 'Open-source design system with accessible components, theming engine, and comprehensive documentation.',
-    tech: ['TypeScript', 'Storybook', 'Tailwind CSS', 'Radix UI'],
-    githubUrl: 'https://github.com',
-    liveUrl: 'https://example.com',
+    title: 'Applicant Screening System',
+    description: 'Implemented an applicant screening system that captures form submissions directly into the CRM and automatically alerts stakeholders, improving response speed to qualified applicants.',
+    tech: ['Airtable', 'n8n', 'Slack', 'CRM', 'Automation'],
   },
 ]
 
@@ -58,7 +47,7 @@ export function Projects() {
         Featured <span className="text-gradient">Projects</span>
       </h2>
       <p className="text-muted-foreground text-center mb-16 max-w-2xl mx-auto">
-        A selection of projects I&apos;ve built that showcase my skills and passion.
+        A selection of automation and Salesforce solutions I&apos;ve built.
       </p>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

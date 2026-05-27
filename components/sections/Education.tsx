@@ -3,20 +3,10 @@ import type { Education } from '@/types'
 const education: Education[] = [
   {
     id: '1',
-    degree: 'Bachelor of Science in Computer Science',
-    institution: 'University Name',
-    startDate: '2014',
-    endDate: '2018',
-    gpa: '3.8/4.0',
-    achievements: ['Dean\'s List', 'CS Honor Society', 'Capstone Project Award'],
-  },
-  {
-    id: '2',
-    degree: 'Full Stack Web Development',
-    institution: 'Coding Bootcamp',
-    startDate: '2018',
-    endDate: '2018',
-    achievements: ['Top of Class', 'Best Final Project'],
+    degree: 'Bachelor of Science in Information Technology',
+    institution: 'University of Santo Tomas — Manila',
+    startDate: '2012',
+    endDate: '2016',
   },
 ]
 
@@ -41,21 +31,11 @@ export function Education() {
             <p className="text-sm text-muted-foreground font-mono mb-4">
               {edu.startDate} — {edu.endDate}
             </p>
-            {edu.gpa && (
-              <p className="text-sm text-accent font-mono mb-3">GPA: {edu.gpa}</p>
-            )}
-            {edu.achievements && edu.achievements.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {edu.achievements.map((a) => (
-                  <span
-                    key={a}
-                    className="text-xs px-2 py-1 rounded-md bg-accent/10 text-accent"
-                  >
-                    {a}
-                  </span>
-                ))}
-              </div>
-            )}
+            <div className="flex flex-wrap gap-2">
+              <span className="text-xs px-2 py-1 rounded-md bg-accent/10 text-accent">
+                Cum Laude Candidate
+              </span>
+            </div>
           </div>
         ))}
       </div>

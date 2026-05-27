@@ -10,8 +10,8 @@ import { Contact } from '@/components/sections/Contact'
 import { Footer } from '@/components/sections/Footer'
 
 export const metadata: Metadata = {
-  title: 'Resume | Portfolio',
-  description: 'Personal resume and portfolio website showcasing professional experience, skills, and projects.',
+  title: 'Chino Vicente | Business Automation Specialist & Salesforce Developer',
+  description: 'Personal portfolio of Chino Vicente — Salesforce Certified Admin, Platform App Builder, and Business Automation Specialist. 5+ years of experience in Salesforce, n8n, Make.com, and AI-powered workflow automation.',
 }
 
 export default function HomePage() {

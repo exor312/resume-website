@@ -1,45 +1,61 @@
-import { Code2, Palette, Wrench, Sparkles } from 'lucide-react'
+import { Code2, Palette, Wrench, Sparkles, Cloud, Brain, Database } from 'lucide-react'
 import type { SkillCategory } from '@/types'
 
 const skillCategories: SkillCategory[] = [
   {
-    category: 'Languages',
+    category: 'Salesforce & CRM',
     skills: [
-      { name: 'TypeScript', icon: 'code2' },
-      { name: 'JavaScript', icon: 'code2' },
-      { name: 'Python', icon: 'code2' },
-      { name: 'Go', icon: 'code2' },
-      { name: 'SQL', icon: 'code2' },
+      { name: 'Salesforce Admin', icon: 'cloud' },
+      { name: 'Apex Coding', icon: 'code2' },
+      { name: 'SOQL', icon: 'database' },
+      { name: 'Flows', icon: 'wrench' },
+      { name: 'Data Loader', icon: 'database' },
+      { name: 'Workbench', icon: 'wrench' },
+      { name: 'Salesforce Inspector', icon: 'wrench' },
+      { name: 'Copado', icon: 'wrench' },
     ],
   },
   {
-    category: 'Frameworks',
+    category: 'Automation & AI',
     skills: [
-      { name: 'React', icon: 'sparkles' },
-      { name: 'Next.js', icon: 'sparkles' },
-      { name: 'Node.js', icon: 'sparkles' },
-      { name: 'Express', icon: 'sparkles' },
-      { name: 'Tailwind CSS', icon: 'palette' },
+      { name: 'N8N', icon: 'sparkles' },
+      { name: 'Make.com', icon: 'sparkles' },
+      { name: 'Zapier', icon: 'sparkles' },
+      { name: 'AI Prompt Design', icon: 'brain' },
+      { name: 'Gemini AI', icon: 'brain' },
+      { name: 'Azure OpenAI', icon: 'brain' },
+      { name: 'GHL', icon: 'wrench' },
     ],
   },
   {
-    category: 'Tools',
-    skills: [
-      { name: 'Git', icon: 'wrench' },
-      { name: 'Docker', icon: 'wrench' },
-      { name: 'AWS', icon: 'wrench' },
-      { name: 'Vercel', icon: 'wrench' },
-      { name: 'Figma', icon: 'palette' },
-    ],
-  },
-  {
-    category: 'Other',
+    category: 'Development',
     skills: [
       { name: 'REST APIs', icon: 'code2' },
-      { name: 'GraphQL', icon: 'code2' },
-      { name: 'PostgreSQL', icon: 'code2' },
-      { name: 'MongoDB', icon: 'code2' },
-      { name: 'Redis', icon: 'code2' },
+      { name: 'Git', icon: 'wrench' },
+      { name: 'Azure DevOps', icon: 'cloud' },
+      { name: 'VS Code', icon: 'code2' },
+      { name: 'TypeScript', icon: 'code2' },
+      { name: 'PHP', icon: 'code2' },
+      { name: 'Next.js', icon: 'sparkles' },
+      { name: 'React', icon: 'sparkles' },
+    ],
+  },
+  {
+    category: 'Testing & QA',
+    skills: [
+      { name: 'Ranorex', icon: 'wrench' },
+      { name: 'Selenium', icon: 'wrench' },
+      { name: 'CI/CD', icon: 'wrench' },
+      { name: 'Agile', icon: 'sparkles' },
+    ],
+  },
+  {
+    category: 'Data & Analytics',
+    skills: [
+      { name: 'Tableau', icon: 'database' },
+      { name: 'PostgreSQL', icon: 'database' },
+      { name: 'Airtable', icon: 'database' },
+      { name: 'Data Analysis', icon: 'database' },
     ],
   },
 ]
@@ -49,6 +65,9 @@ const iconMap: Record<string, React.ReactNode> = {
   palette: <Palette size={14} />,
   wrench: <Wrench size={14} />,
   sparkles: <Sparkles size={14} />,
+  cloud: <Cloud size={14} />,
+  brain: <Brain size={14} />,
+  database: <Database size={14} />,
 }
 
 export function Skills() {
@@ -58,7 +77,7 @@ export function Skills() {
         Skills &amp; <span className="text-gradient">Technologies</span>
       </h2>
       <p className="text-muted-foreground text-center mb-16 max-w-2xl mx-auto">
-        Tools and technologies I use to bring ideas to life.
+        Tools and technologies I use to automate, build, and scale.
       </p>
 
       <div className="grid gap-8 md:grid-cols-2">
@@ -82,6 +101,29 @@ export function Skills() {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Certifications */}
+      <div className="mt-12 p-6 bg-surface border border-border rounded-2xl">
+        <h3 className="text-lg font-heading font-semibold mb-4 text-accent">Certifications</h3>
+        <ul className="space-y-2">
+          <li className="text-sm text-muted-foreground flex items-start gap-2">
+            <span className="text-accent mt-1.5 shrink-0">▹</span>
+            Salesforce Certified Administrator (SCA) — ID: 20261424
+          </li>
+          <li className="text-sm text-muted-foreground flex items-start gap-2">
+            <span className="text-accent mt-1.5 shrink-0">▹</span>
+            Salesforce Certified Platform App Builder — ID: 22676107
+          </li>
+          <li className="text-sm text-muted-foreground flex items-start gap-2">
+            <span className="text-accent mt-1.5 shrink-0">▹</span>
+            Salesforce Certified Associate (x2) — IDs: 3047747, 5181279
+          </li>
+          <li className="text-sm text-muted-foreground flex items-start gap-2">
+            <span className="text-accent mt-1.5 shrink-0">▹</span>
+            Copado Certified Fundamentals I — ID: 023256
+          </li>
+        </ul>
       </div>
     </section>
   )

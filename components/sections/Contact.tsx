@@ -1,10 +1,10 @@
-import { Github, Linkedin, Twitter, Mail } from 'lucide-react'
+import { Github, Linkedin, Mail, ExternalLink } from 'lucide-react'
 
 const socialLinks = [
-  { platform: 'GitHub', url: 'https://github.com', icon: Github },
-  { platform: 'LinkedIn', url: 'https://linkedin.com', icon: Linkedin },
-  { platform: 'Twitter', url: 'https://twitter.com', icon: Twitter },
-  { platform: 'Email', url: 'mailto:hello@example.com', icon: Mail },
+  { platform: 'Email', url: 'mailto:chinovicente312@gmail.com', icon: Mail },
+  { platform: 'LinkedIn', url: 'https://linkedin.com/in/chinovicente', icon: Linkedin },
+  { platform: 'Trailhead', url: 'https://www.salesforce.com/trailblazer/chinovicente', icon: ExternalLink },
+  { platform: 'GitHub', url: 'https://github.com/exor312', icon: Github },
 ]
 
 export function Contact() {
@@ -20,7 +20,7 @@ export function Contact() {
         </p>
 
         <a
-          href="mailto:hello@example.com"
+          href="mailto:chinovicente312@gmail.com"
           className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-primary text-primary-foreground font-medium text-lg hover:bg-primary/90 transition-colors glow-primary mb-10"
         >
           <Mail size={20} />
