@@ -25,8 +25,8 @@ export function Navbar() {
   return (
     <nav
       className={cn(
-        'fixed top-0 w-full z-50 h-16 border-b border-border/50 bg-background/80 backdrop-blur-md flex items-center justify-between px-6 transition-all',
-        scrolled && 'shadow-lg shadow-background/50'
+        'fixed top-0 w-full z-50 h-16 border-b border-border/50 bg-background/80 backdrop-blur-md flex items-center justify-between px-6 transition-all duration-300',
+        scrolled && 'shadow-lg shadow-background/50 border-border'
       )}
     >
       <a href="#" className="text-xl font-heading font-bold text-gradient">

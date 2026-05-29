@@ -1,4 +1,8 @@
+'use client'
+
+import { useInView } from '@/hooks/useInView'
 import type { Experience } from '@/types'
+import { cn } from '@/lib/utils'
 
 const experiences: Experience[] = [
   {
@@ -87,62 +91,78 @@ const experiences: Experience[] = [
 ]
 
 export function Experience() {
+  const { ref, isVisible } = useInView<HTMLDivElement>({ threshold: 0.05 })
+
   return (
     <section id="experience" className="py-20 px-4 md:px-8 max-w-6xl mx-auto">
-      <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4 text-center">
-        Work <span className="text-gradient">Experience</span>
-      </h2>
-      <p className="text-muted-foreground text-center mb-16 max-w-2xl mx-auto">
-        A timeline of my professional journey and the impact I&apos;ve made.
-      </p>
+      <div ref={ref} className={cn(isVisible && 'is-visible')}>
+        <h2 className="animate-fade-in-up text-3xl md:text-4xl font-heading font-bold mb-4 text-center">
+          Work <span className="text-gradient">Experience</span>
+        </h2>
+        <p className="animate-fade-in-up animation-delay-200 text-muted-foreground text-center mb-16 max-w-2xl mx-auto">
+          A timeline of my professional journey and the impact I&apos;ve made.
+        </p>
 
-      <div className="relative">
-        {/* Timeline line */}
-        <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-border md:-translate-x-px" />
+        <div className="relative">
+          {/* Timeline line — animated grow */}
+          <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-border md:-translate-x-px overflow-hidden">
+            <div className={cn(
+              "w-full bg-gradient-to-b from-primary to-accent transition-all duration-1000 ease-out",
+              isVisible ? "h-full" : "h-0"
+            )} />
+          </div>
 
-        <div className="space-y-12">
-          {experiences.map((exp, index) => (
-            <div
-              key={exp.id}
-              className={`relative flex flex-col md:flex-row gap-8 ${
-                index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-              }`}
-            >
-              {/* Timeline dot */}
-              <div className="absolute left-0 md:left-1/2 w-3 h-3 bg-primary rounded-full -translate-x-1.5 md:-translate-x-1.5 mt-2 z-10 glow-primary" />
+          <div className="space-y-12">
+            {experiences.map((exp, index) => {
+              const isEven = index % 2 === 0
+              const animClass = isEven ? 'animate-fade-in-left' : 'animate-fade-in-right'
+              return (
+                <div
+                  key={exp.id}
+                  className={cn(
+                    'relative flex flex-col md:flex-row gap-8',
+                    isEven ? 'md:flex-row' : 'md:flex-row-reverse',
+                    animClass,
+                    index > 0 && `animation-delay-${Math.min(index * 100, 800)}`
+                  )}
+                >
+                  {/* Timeline dot */}
+                  <div className="absolute left-0 md:left-1/2 w-3 h-3 bg-primary rounded-full -translate-x-1.5 md:-translate-x-1.5 mt-2 z-10 animate-pulse-glow" />
 
-              {/* Card */}
-              <div className={`md:w-[calc(50%-2rem)] ${index % 2 === 0 ? 'md:pr-0' : 'md:pl-0'} ml-6 md:ml-0`}>
-                <div className="bg-surface border border-border rounded-2xl p-6 hover:border-primary/50 transition-colors">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
-                    <h3 className="text-lg font-heading font-semibold">{exp.role}</h3>
-                    <span className="text-sm text-muted-foreground font-mono">
-                      {exp.startDate} — {exp.endDate}
-                    </span>
-                  </div>
-                  <p className="text-primary font-medium mb-3">{exp.company}</p>
-                  <ul className="space-y-2 mb-4">
-                    {exp.description.map((item, i) => (
-                      <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                        <span className="text-accent mt-1.5 shrink-0">▹</span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="flex flex-wrap gap-2">
-                    {exp.tech.map((t) => (
-                      <span
-                        key={t}
-                        className="text-xs font-mono px-2 py-1 rounded-md bg-secondary text-secondary-foreground"
-                      >
-                        {t}
-                      </span>
-                    ))}
+                  {/* Card */}
+                  <div className={`md:w-[calc(50%-2rem)] ${isEven ? 'md:pr-0' : 'md:pl-0'} ml-6 md:ml-0`}>
+                    <div className="bg-surface border border-border rounded-2xl p-6 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
+                        <h3 className="text-lg font-heading font-semibold">{exp.role}</h3>
+                        <span className="text-sm text-muted-foreground font-mono">
+                          {exp.startDate} — {exp.endDate}
+                        </span>
+                      </div>
+                      <p className="text-primary font-medium mb-3">{exp.company}</p>
+                      <ul className="space-y-2 mb-4">
+                        {exp.description.map((item, i) => (
+                          <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                            <span className="text-accent mt-1.5 shrink-0">▹</span>
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="flex flex-wrap gap-2">
+                        {exp.tech.map((t) => (
+                          <span
+                            key={t}
+                            className="text-xs font-mono px-2 py-1 rounded-md bg-secondary text-secondary-foreground"
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              )
+            })}
+          </div>
         </div>
       </div>
     </section>

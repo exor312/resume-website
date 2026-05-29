@@ -1,6 +1,10 @@
+'use client'
+
 import Image from 'next/image'
+import { useInView } from '@/hooks/useInView'
 import type { Project } from '@/types'
 import { Github, ExternalLink } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 const projects: Project[] = [
   {
@@ -50,82 +54,89 @@ const projects: Project[] = [
 ]
 
 export function Projects() {
+  const { ref, isVisible } = useInView<HTMLDivElement>({ threshold: 0.05 })
+
   return (
     <section id="projects" className="py-20 px-4 md:px-8 max-w-6xl mx-auto">
-      <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4 text-center">
-        Featured <span className="text-gradient">Projects</span>
-      </h2>
-      <p className="text-muted-foreground text-center mb-16 max-w-2xl mx-auto">
-        A selection of full-stack web apps, automation, and Salesforce solutions I&apos;ve built.
-      </p>
+      <div ref={ref} className={cn(isVisible && 'is-visible')}>
+        <h2 className="animate-fade-in-up text-3xl md:text-4xl font-heading font-bold mb-4 text-center">
+          Featured <span className="text-gradient">Projects</span>
+        </h2>
+        <p className="animate-fade-in-up animation-delay-200 text-muted-foreground text-center mb-16 max-w-2xl mx-auto">
+          A selection of full-stack web apps, automation, and Salesforce solutions I&apos;ve built.
+        </p>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {projects.map((project) => (
-          <div
-            key={project.id}
-            className="group bg-surface border border-border rounded-2xl overflow-hidden hover:border-primary/50 transition-all"
-          >
-            {project.image ? (
-              <div className="relative h-40 bg-secondary/30">
-                <Image
-                  src={project.image}
-                  alt={`${project.title} thumbnail`}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-            ) : (
-              <div className="h-40 bg-gradient-to-br from-primary/20 via-accent/10 to-secondary flex items-center justify-center">
-                <span className="text-4xl font-heading font-bold text-primary/30 group-hover:text-primary/50 transition-colors">
-                  {project.title.charAt(0)}
-                </span>
-              </div>
-            )}
-
-            <div className="p-6">
-              <h3 className="text-lg font-heading font-semibold mb-2">{project.title}</h3>
-              <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
-                {project.description}
-              </p>
-
-              <div className="flex flex-wrap gap-2 mb-4">
-                {project.tech.map((t) => (
-                  <span
-                    key={t}
-                    className="text-xs font-mono px-2 py-1 rounded-md bg-secondary text-secondary-foreground"
-                  >
-                    {t}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {projects.map((project, i) => (
+            <div
+              key={project.id}
+              className={cn(
+                "group bg-surface border border-border rounded-2xl overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1 animate-fade-in-up",
+                i > 0 && `animation-delay-${Math.min(i * 100, 800)}`
+              )}
+            >
+              {project.image ? (
+                <div className="relative h-40 bg-secondary/30 overflow-hidden">
+                  <Image
+                    src={project.image}
+                    alt={`${project.title} thumbnail`}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+              ) : (
+                <div className="h-40 bg-gradient-to-br from-primary/20 via-accent/10 to-secondary flex items-center justify-center">
+                  <span className="text-4xl font-heading font-bold text-primary/30 group-hover:text-primary/50 transition-colors group-hover:scale-110 duration-300">
+                    {project.title.charAt(0)}
                   </span>
-                ))}
-              </div>
+                </div>
+              )}
 
-              <div className="flex items-center gap-3">
-                {project.githubUrl && (
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-foreground transition-colors"
-                    aria-label={`${project.title} GitHub`}
-                  >
-                    <Github size={18} />
-                  </a>
-                )}
-                {project.liveUrl && (
-                  <a
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-foreground transition-colors"
-                    aria-label={`${project.title} live demo`}
-                  >
-                    <ExternalLink size={18} />
-                  </a>
-                )}
+              <div className="p-6">
+                <h3 className="text-lg font-heading font-semibold mb-2">{project.title}</h3>
+                <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
+                  {project.description}
+                </p>
+
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.tech.map((t) => (
+                    <span
+                      key={t}
+                      className="text-xs font-mono px-2 py-1 rounded-md bg-secondary text-secondary-foreground"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-3">
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground hover:text-foreground transition-colors duration-200 hover:scale-110"
+                      aria-label={`${project.title} GitHub`}
+                    >
+                      <Github size={18} />
+                    </a>
+                  )}
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-muted-foreground hover:text-foreground transition-colors duration-200 hover:scale-110"
+                      aria-label={`${project.title} live demo`}
+                    >
+                      <ExternalLink size={18} />
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   )
