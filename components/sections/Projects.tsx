@@ -26,7 +26,7 @@ const projects: Project[] = [
     image: '/photo-studio-thumb.svg',
     tech: ['Next.js 15', 'Supabase', 'Tailwind CSS', 'shadcn/ui', 'PostgreSQL'],
     githubUrl: 'https://github.com/exor312/photo-studio',
-    liveUrl: 'https://studioshia.com',
+    liveUrl: 'https://photo-studio-alpha-ten.vercel.app',
   },
   {
     id: '2',
