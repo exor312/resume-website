@@ -32,6 +32,8 @@ export type Project = {
   id: string
   title: string
   description: string
+  role?: string
+  details?: string[]
   image?: string
   tech: string[]
   githubUrl?: string
