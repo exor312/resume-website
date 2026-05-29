@@ -1,11 +1,25 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { useInView } from '@/hooks/useInView'
-import type { Project } from '@/types'
-import { Github, ExternalLink, ChevronDown, FolderGit2 } from 'lucide-react'
+import type { Project, ImpactStat } from '@/types'
+import {
+  Github, ExternalLink, FolderGit2,
+  Clock, DollarSign, TrendingUp, Users, Zap, Shield, Percent,
+  X, ChevronLeft, ChevronRight,
+} from 'lucide-react'
 import { cn } from '@/lib/utils'
+
+const iconMap: Record<ImpactStat['icon'], React.ComponentType<{ size?: number; className?: string }>> = {
+  clock: Clock,
+  dollar: DollarSign,
+  trending: TrendingUp,
+  users: Users,
+  zap: Zap,
+  shield: Shield,
+  percent: Percent,
+}
 
 const projects: Project[] = [
   {
@@ -27,6 +41,12 @@ const projects: Project[] = [
     tech: ['Next.js 15', 'Supabase', 'Tailwind CSS', 'shadcn/ui', 'PostgreSQL'],
     githubUrl: 'https://github.com/exor312/photo-studio',
     liveUrl: 'https://photo-studio-alpha-ten.vercel.app',
+    impact: [
+      { label: 'Booking Automation', value: '100%', icon: 'percent' },
+      { label: 'Hours Saved', value: '~5 hrs/wk', icon: 'clock' },
+      { label: 'Client Time Saved', value: '~15 min/booking', icon: 'users' },
+      { label: 'Admin Review', value: '< 2 min', icon: 'zap' },
+    ],
   },
   {
     id: '2',
@@ -41,6 +61,12 @@ const projects: Project[] = [
       'Implemented stakeholder notification system — key events trigger instant Slack alerts to relevant teams',
     ],
     tech: ['Airtable', 'n8n', 'Docuseal', 'Slack', 'REST APIs'],
+    impact: [
+      { label: 'Contract Processing', value: 'Hours → Minutes', icon: 'clock' },
+      { label: 'Manual Handling', value: '100% Eliminated', icon: 'percent' },
+      { label: 'Workflow Steps', value: '12+ Automated', icon: 'zap' },
+      { label: 'Notifications', value: 'Real-time', icon: 'users' },
+    ],
   },
   {
     id: '3',
@@ -55,6 +81,12 @@ const projects: Project[] = [
       'Reduced content creation time by 80% while maintaining consistent brand visual identity',
     ],
     tech: ['Gemini AI', 'n8n', 'LinkedIn API', 'Azure OpenAI'],
+    impact: [
+      { label: 'Content Time', value: '80% Reduction', icon: 'percent' },
+      { label: 'Design Work', value: 'Fully Automated', icon: 'zap' },
+      { label: 'Brand Consistency', value: '100%', icon: 'shield' },
+      { label: 'Post Frequency', value: '3x Increase', icon: 'trending' },
+    ],
   },
   {
     id: '4',
@@ -70,6 +102,12 @@ const projects: Project[] = [
       'Reduced missed follow-up rates and improved patient satisfaction scores significantly',
     ],
     tech: ['n8n', 'Twilio', 'Azure OpenAI', 'PostgreSQL', 'AI Prompt Design'],
+    impact: [
+      { label: 'Follow-up Miss Rate', value: '~90% Reduction', icon: 'percent' },
+      { label: 'Monitoring', value: '24/7 Auto', icon: 'users' },
+      { label: 'Staff Time Saved', value: '~10 hrs/wk', icon: 'clock' },
+      { label: 'Escalation', value: 'AI-Triage', icon: 'shield' },
+    ],
   },
   {
     id: '5',
@@ -84,6 +122,12 @@ const projects: Project[] = [
       'Reduced billing cycle time from 3 days to under 2 hours with 100% calculation accuracy',
     ],
     tech: ['Connecteam', 'n8n', 'PDF.co', 'Automation'],
+    impact: [
+      { label: 'Billing Cycle', value: '3 days → 2 hrs', icon: 'clock' },
+      { label: 'Accuracy', value: '100%', icon: 'shield' },
+      { label: 'Manual Entry', value: 'Fully Eliminated', icon: 'zap' },
+      { label: 'Labor Cost Saved', value: '~85%', icon: 'dollar' },
+    ],
   },
   {
     id: '6',
@@ -98,6 +142,12 @@ const projects: Project[] = [
       'Enhanced security posture by centralizing identity management and reducing credential sprawl',
     ],
     tech: ['Salesforce', 'SSO', 'REST APIs', 'Apex', 'Azure DevOps'],
+    impact: [
+      { label: 'Auth Centralized', value: '100%', icon: 'shield' },
+      { label: 'Credential Sprawl', value: 'Eliminated', icon: 'zap' },
+      { label: 'Data Sync', value: 'Real-time', icon: 'trending' },
+      { label: 'Custom Flows', value: '15+', icon: 'percent' },
+    ],
   },
   {
     id: '7',
@@ -111,29 +161,35 @@ const projects: Project[] = [
       'Improved response speed to qualified applicants by cutting manual review latency to near-zero',
     ],
     tech: ['Airtable', 'n8n', 'Slack', 'CRM', 'Automation'],
+    impact: [
+      { label: 'Response Time', value: 'Near-Zero', icon: 'clock' },
+      { label: 'Manual Review', value: 'Automated', icon: 'zap' },
+      { label: 'Leads Caught', value: '100%', icon: 'trending' },
+      { label: 'Slack Alerts', value: 'Instant', icon: 'users' },
+    ],
   },
 ]
 
-/* ─── Expandable Project Card ─── */
+/* ─── Icon helper ─── */
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
-  const [expanded, setExpanded] = useState(false)
-  const contentRef = useRef<HTMLDivElement>(null)
-  const [contentHeight, setContentHeight] = useState(0)
+function ImpactIcon({ icon, className }: { icon: ImpactStat['icon']; className?: string }) {
+  const Icon = iconMap[icon]
+  return <Icon size={18} className={className} />
+}
 
-  useEffect(() => {
-    if (contentRef.current) {
-      setContentHeight(contentRef.current.scrollHeight)
-    }
-  }, [expanded])
+/* ─── Project Card (clickable, opens modal) ─── */
 
-  const hasDetails = project.details && project.details.length > 0
+function ProjectCard({ project, index, onClick }: { project: Project; index: number; onClick: () => void }) {
+  const hasImpact = project.impact && project.impact.length > 0
 
   return (
-    <div
+    <button
+      type="button"
+      onClick={onClick}
       className={cn(
-        "group bg-surface border border-border rounded-2xl overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 animate-fade-in-up",
-        expanded && "border-primary/40 shadow-lg shadow-primary/10",
+        "group text-left bg-surface border border-border rounded-2xl overflow-hidden",
+        "hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5",
+        "animate-fade-in-up focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
         index > 0 && `animation-delay-${Math.min(index * 100, 800)}`
       )}
     >
@@ -156,20 +212,10 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       )}
 
       <div className="p-6">
-        {/* Title row */}
+        {/* Top row: title + arrow */}
         <div className="flex items-start justify-between gap-2 mb-1">
           <h3 className="text-lg font-heading font-semibold leading-tight">{project.title}</h3>
-          {project.githubUrl && (
-            <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground transition-colors duration-200 hover:scale-110 shrink-0 mt-0.5"
-              aria-label={`${project.title} GitHub`}
-            >
-              <Github size={16} />
-            </a>
-          )}
+          <ChevronRight size={16} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all duration-200 shrink-0 mt-1" />
         </div>
 
         {/* Role badge */}
@@ -181,50 +227,194 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         )}
 
         {/* Short description */}
-        <p className="text-sm text-muted-foreground mb-4">
+        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
           {project.description}
         </p>
 
-        {/* Tech tags */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          {project.tech.map((t) => (
-            <span
-              key={t}
-              className="text-xs font-mono px-2 py-1 rounded-md bg-secondary text-secondary-foreground"
-            >
+        {/* Tech tags (first 3) */}
+        <div className="flex flex-wrap gap-1.5 mb-3">
+          {project.tech.slice(0, 3).map((t) => (
+            <span key={t} className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-secondary text-secondary-foreground">
               {t}
             </span>
           ))}
+          {project.tech.length > 3 && (
+            <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-secondary/50 text-muted-foreground">
+              +{project.tech.length - 3}
+            </span>
+          )}
         </div>
 
-        {/* Expand / Collapse button */}
-        {hasDetails && (
+        {/* Impact teaser — 2 stats preview */}
+        {hasImpact && (
+          <div className="flex items-center gap-3 pt-3 border-t border-border/50">
+            {project.impact!.slice(0, 2).map((stat) => (
+              <div key={stat.label} className="flex items-center gap-1.5">
+                <ImpactIcon icon={stat.icon} className="text-primary/70" />
+                <span className="text-[11px] font-mono text-muted-foreground">{stat.value}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </button>
+  )
+}
+
+/* ─── Project Modal (full-screen overlay) ─── */
+
+function ProjectModal({ project, onClose, onPrev, onNext, hasPrev, hasNext }: {
+  project: Project
+  onClose: () => void
+  onPrev: () => void
+  onNext: () => void
+  hasPrev: boolean
+  hasNext: boolean
+}) {
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowLeft' && hasPrev) onPrev()
+      if (e.key === 'ArrowRight' && hasNext) onNext()
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [onClose, onPrev, onNext, hasPrev, hasNext])
+
+  return (
+    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label={project.title}>
+      {/* Backdrop */}
+      <div className="modal-backdrop" />
+
+      {/* Content container */}
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+
+        {/* Close button */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="fixed top-4 right-4 z-50 p-2 rounded-full bg-card/80 backdrop-blur-sm border border-border text-muted-foreground hover:text-foreground hover:border-primary/50 transition-all duration-200"
+          aria-label="Close modal"
+        >
+          <X size={20} />
+        </button>
+
+        {/* Prev / Next arrows */}
+        {hasPrev && (
           <button
-            onClick={() => setExpanded(!expanded)}
-            className="flex items-center gap-1.5 text-xs font-mono text-accent hover:text-accent/80 transition-colors duration-200 mb-3"
+            type="button"
+            onClick={onPrev}
+            className="fixed left-2 md:left-4 top-1/2 -translate-y-1/2 z-50 p-2 rounded-full bg-card/80 backdrop-blur-sm border border-border text-muted-foreground hover:text-foreground hover:border-primary/50 transition-all duration-200"
+            aria-label="Previous project"
           >
-            <ChevronDown
-              size={14}
-              className={cn(
-                "transition-transform duration-300",
-                expanded && "rotate-180"
-              )}
-            />
-            {expanded ? 'Show less' : `View details (${project.details!.length})`}
+            <ChevronLeft size={24} />
+          </button>
+        )}
+        {hasNext && (
+          <button
+            type="button"
+            onClick={onNext}
+            className="fixed right-2 md:right-4 top-1/2 -translate-y-1/2 z-50 p-2 rounded-full bg-card/80 backdrop-blur-sm border border-border text-muted-foreground hover:text-foreground hover:border-primary/50 transition-all duration-200"
+            aria-label="Next project"
+          >
+            <ChevronRight size={24} />
           </button>
         )}
 
-        {/* Expandable details panel */}
-        <div
-          style={{ maxHeight: expanded ? `${contentHeight}px` : '0px' }}
-          className="overflow-hidden transition-all duration-300 ease-out"
-        >
-          <div ref={contentRef}>
+        {/* === Scrollable content === */}
+        <div className="modal-scroll">
+
+          {/* Hero area */}
+          <div className="relative">
+            {project.image ? (
+              <div className="relative h-56 md:h-72 bg-secondary/30">
+                <Image
+                  src={project.image}
+                  alt={`${project.title} thumbnail`}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
+              </div>
+            ) : (
+              <div className="h-40 md:h-48 bg-gradient-to-br from-primary/10 via-accent/5 to-background" />
+            )}
+          </div>
+
+          {/* Content wrapper */}
+          <div className="max-w-4xl mx-auto px-4 md:px-8 pb-20 -mt-8 relative">
+
+            {/* Title + role */}
+            <div className="mb-6">
+              {project.role && (
+                <div className="flex items-center gap-1.5 text-xs text-accent font-mono mb-2">
+                  <FolderGit2 size={12} />
+                  {project.role}
+                </div>
+              )}
+              <h2 className="text-2xl md:text-3xl font-heading font-bold leading-tight">
+                {project.title}
+              </h2>
+              <p className="text-muted-foreground mt-3 text-sm md:text-base leading-relaxed max-w-2xl">
+                {project.description}
+              </p>
+            </div>
+
+            {/* Tech tags */}
+            <div className="flex flex-wrap gap-2 mb-8">
+              {project.tech.map((t) => (
+                <span key={t} className="text-xs font-mono px-2.5 py-1 rounded-md bg-secondary text-secondary-foreground">
+                  {t}
+                </span>
+              ))}
+            </div>
+
+            {/* ─── Impact Stats ─── */}
+            {project.impact && project.impact.length > 0 && (
+              <div className="mb-10">
+                <h3 className="text-sm font-heading font-semibold uppercase tracking-wider text-muted-foreground mb-4">
+                  Impact & Results
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {project.impact.map((stat) => (
+                    <div
+                      key={stat.label}
+                      className="bg-surface border border-border rounded-xl p-4 hover:border-primary/40 transition-colors duration-200"
+                    >
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="p-1.5 rounded-lg bg-primary/10">
+                          <ImpactIcon icon={stat.icon} className="text-primary" />
+                        </div>
+                      </div>
+                      <p className="text-lg md:text-xl font-heading font-bold text-foreground leading-none mb-1">
+                        {stat.value}
+                      </p>
+                      <p className="text-[11px] text-muted-foreground font-mono">
+                        {stat.label}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ─── What was built ─── */}
             {project.details && project.details.length > 0 && (
-              <div className="pt-3 border-t border-border">
-                <ul className="space-y-2.5">
+              <div className="mb-10">
+                <h3 className="text-sm font-heading font-semibold uppercase tracking-wider text-muted-foreground mb-4">
+                  What Was Built
+                </h3>
+                <ul className="space-y-3">
                   {project.details.map((detail, i) => (
-                    <li key={i} className="text-sm text-muted-foreground flex items-start gap-2.5">
+                    <li key={i} className="flex items-start gap-3 text-sm text-muted-foreground leading-relaxed">
                       <span className="text-accent mt-1.5 shrink-0 text-[10px]">▹</span>
                       <span>{detail}</span>
                     </li>
@@ -232,23 +422,33 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 </ul>
               </div>
             )}
-          </div>
-        </div>
 
-        {/* Links row */}
-        <div className="flex items-center gap-3 mt-3 pt-3 border-t border-border/50">
-          {project.liveUrl && (
-            <a
-              href={project.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs font-mono text-muted-foreground hover:text-foreground transition-colors duration-200 hover:scale-105"
-              aria-label={`${project.title} live demo`}
-            >
-              <ExternalLink size={14} />
-              Live Demo
-            </a>
-          )}
+            {/* ─── Links ─── */}
+            <div className="flex flex-wrap items-center gap-4 pt-6 border-t border-border">
+              {project.githubUrl && (
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm font-mono hover:bg-secondary/80 transition-colors duration-200"
+                >
+                  <Github size={16} />
+                  View Source
+                </a>
+              )}
+              {project.liveUrl && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-mono hover:bg-primary/90 transition-colors duration-200"
+                >
+                  <ExternalLink size={16} />
+                  Live Demo
+                </a>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -259,23 +459,49 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
 export function Projects() {
   const { ref, isVisible } = useInView<HTMLDivElement>({ threshold: 0.05 })
+  const [activeIndex, setActiveIndex] = useState<number | null>(null)
+
+  const openModal = useCallback((index: number) => setActiveIndex(index), [])
+  const closeModal = useCallback(() => setActiveIndex(null), [])
+  const prevProject = useCallback(() => {
+    setActiveIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : prev))
+  }, [])
+  const nextProject = useCallback(() => {
+    setActiveIndex((prev) => (prev !== null && prev < projects.length - 1 ? prev + 1 : prev))
+  }, [])
+
+  const activeProject = activeIndex !== null ? projects[activeIndex] : null
 
   return (
-    <section id="projects" className="py-20 px-4 md:px-8 max-w-6xl mx-auto">
-      <div ref={ref} className={cn(isVisible && 'is-visible')}>
-        <h2 className="animate-fade-in-up text-3xl md:text-4xl font-heading font-bold mb-4 text-center">
-          Featured <span className="text-gradient">Projects</span>
-        </h2>
-        <p className="animate-fade-in-up animation-delay-200 text-muted-foreground text-center mb-16 max-w-2xl mx-auto">
-          Click to expand each project and see the full breakdown of what was built.
-        </p>
+    <>
+      <section id="projects" className="py-20 px-4 md:px-8 max-w-6xl mx-auto">
+        <div ref={ref} className={cn(isVisible && 'is-visible')}>
+          <h2 className="animate-fade-in-up text-3xl md:text-4xl font-heading font-bold mb-4 text-center">
+            Featured <span className="text-gradient">Projects</span>
+          </h2>
+          <p className="animate-fade-in-up animation-delay-200 text-muted-foreground text-center mb-16 max-w-2xl mx-auto">
+            Click a project to see the full breakdown — impact metrics, what was built, and results.
+          </p>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project, i) => (
-            <ProjectCard key={project.id} project={project} index={i} />
-          ))}
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {projects.map((project, i) => (
+              <ProjectCard key={project.id} project={project} index={i} onClick={() => openModal(i)} />
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Modal rendered at root level for proper overlay */}
+      {activeProject && (
+        <ProjectModal
+          project={activeProject}
+          onClose={closeModal}
+          onPrev={prevProject}
+          onNext={nextProject}
+          hasPrev={activeIndex !== null && activeIndex > 0}
+          hasNext={activeIndex !== null && activeIndex < projects.length - 1}
+        />
+      )}
+    </>
   )
 }

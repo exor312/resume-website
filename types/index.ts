@@ -28,12 +28,19 @@ export type SkillCategory = {
   skills: Skill[]
 }
 
+export type ImpactStat = {
+  label: string
+  value: string
+  icon: 'clock' | 'dollar' | 'trending' | 'users' | 'zap' | 'shield' | 'percent'
+}
+
 export type Project = {
   id: string
   title: string
   description: string
   role?: string
   details?: string[]
+  impact?: ImpactStat[]
   image?: string
   tech: string[]
   githubUrl?: string
