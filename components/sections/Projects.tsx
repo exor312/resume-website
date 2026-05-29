@@ -1,39 +1,48 @@
+import Image from 'next/image'
 import type { Project } from '@/types'
 import { Github, ExternalLink } from 'lucide-react'
 
 const projects: Project[] = [
   {
     id: '1',
+    title: 'Studio Shia — Self-Photo Studio Booking System',
+    description: 'A full-stack Japanese-themed (Muji-style) booking website for a self-photo studio. Features 30-minute time slot booking (10am–9:30pm), 4 photo packages, double-booking prevention, payment screenshot submission with 10-minute slot hold, an admin dashboard for approval, and automated slot expiration.',
+    image: '/photo-studio-thumb.svg',
+    tech: ['Next.js 15', 'Supabase', 'Tailwind CSS', 'shadcn/ui', 'PostgreSQL'],
+    githubUrl: 'https://github.com/exor312/photo-studio',
+  },
+  {
+    id: '2',
     title: 'AI-Powered CRM & Contract Automation',
     description: 'Built a complete custom CRM for managing Agents, Clients, Doctors, and contract workflows using Airtable, n8n, and Docuseal. Enabled automated contract creation, monitoring, and sending.',
     tech: ['Airtable', 'n8n', 'Docuseal', 'Slack', 'REST APIs'],
   },
   {
-    id: '2',
+    id: '3',
     title: 'AI Image Generation & LinkedIn Publishing',
     description: 'Developed an AI-powered image generation system using Gemini AI, integrated with n8n and LinkedIn API to automatically create branded marketing visuals and publish them.',
     tech: ['Gemini AI', 'n8n', 'LinkedIn API', 'Azure OpenAI'],
   },
   {
-    id: '3',
+    id: '4',
     title: 'AI Postoperative Virtual Receptionist',
     description: 'Built an AI-powered virtual receptionist using n8n, Twilio, Azure OpenAI, and PostgreSQL. Capable of messaging patients after surgery, answering symptom-related questions, and providing triage guidance.',
     tech: ['n8n', 'Twilio', 'Azure OpenAI', 'PostgreSQL', 'AI Prompt Design'],
   },
   {
-    id: '4',
+    id: '5',
     title: 'Invoice Generation Automation',
     description: 'Automated invoice generation by integrating Connecteam, n8n, and PDF.co, eliminating manual calculations and ensuring accurate invoice production from agent timesheets.',
     tech: ['Connecteam', 'n8n', 'PDF.co', 'Automation'],
   },
   {
-    id: '5',
+    id: '6',
     title: 'Salesforce SSO & API Integration',
     description: 'Implemented Single Sign-On (SSO) for Salesforce and integrated with third-party applications using REST APIs, Flows, and Apex — enabling seamless data exchange and real-time synchronization.',
     tech: ['Salesforce', 'SSO', 'REST APIs', 'Apex', 'Azure DevOps'],
   },
   {
-    id: '6',
+    id: '7',
     title: 'Applicant Screening System',
     description: 'Implemented an applicant screening system that captures form submissions directly into the CRM and automatically alerts stakeholders, improving response speed to qualified applicants.',
     tech: ['Airtable', 'n8n', 'Slack', 'CRM', 'Automation'],
@@ -47,7 +56,7 @@ export function Projects() {
         Featured <span className="text-gradient">Projects</span>
       </h2>
       <p className="text-muted-foreground text-center mb-16 max-w-2xl mx-auto">
-        A selection of automation and Salesforce solutions I&apos;ve built.
+        A selection of full-stack web apps, automation, and Salesforce solutions I&apos;ve built.
       </p>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -56,12 +65,22 @@ export function Projects() {
             key={project.id}
             className="group bg-surface border border-border rounded-2xl overflow-hidden hover:border-primary/50 transition-all"
           >
-            {/* Image placeholder */}
-            <div className="h-40 bg-gradient-to-br from-primary/20 via-accent/10 to-secondary flex items-center justify-center">
-              <span className="text-4xl font-heading font-bold text-primary/30 group-hover:text-primary/50 transition-colors">
-                {project.title.charAt(0)}
-              </span>
-            </div>
+            {project.image ? (
+              <div className="relative h-40 bg-secondary/30">
+                <Image
+                  src={project.image}
+                  alt={`${project.title} thumbnail`}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            ) : (
+              <div className="h-40 bg-gradient-to-br from-primary/20 via-accent/10 to-secondary flex items-center justify-center">
+                <span className="text-4xl font-heading font-bold text-primary/30 group-hover:text-primary/50 transition-colors">
+                  {project.title.charAt(0)}
+                </span>
+              </div>
+            )}
 
             <div className="p-6">
               <h3 className="text-lg font-heading font-semibold mb-2">{project.title}</h3>
