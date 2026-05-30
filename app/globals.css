@@ -4,6 +4,29 @@
 
 @layer base {
   :root {
+    --background: 36 30% 96%;
+    --foreground: 25 15% 12%;
+    --card: 36 20% 99%;
+    --card-foreground: 25 15% 12%;
+    --popover: 36 20% 99%;
+    --popover-foreground: 25 15% 12%;
+    --primary: 42 65% 45%;
+    --primary-foreground: 36 30% 98%;
+    --secondary: 36 15% 90%;
+    --secondary-foreground: 25 10% 25%;
+    --muted: 36 10% 88%;
+    --muted-foreground: 25 8% 45%;
+    --accent: 28 55% 48%;
+    --accent-foreground: 36 30% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 36 20% 98%;
+    --border: 36 12% 85%;
+    --input: 36 12% 85%;
+    --ring: 42 65% 45%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
     --background: 25 15% 8%;
     --foreground: 36 20% 95%;
     --card: 25 12% 11%;
@@ -23,7 +46,6 @@
     --border: 25 10% 20%;
     --input: 25 10% 20%;
     --ring: 42 70% 55%;
-    --radius: 0.75rem;
   }
 }
 
@@ -123,10 +145,14 @@
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
   animation: modal-fade-in 0.25s ease-out both;
   z-index: 100;
+}
+
+.dark .modal-backdrop {
+  background: rgba(0, 0, 0, 0.7);
 }
 
 .modal-content {
